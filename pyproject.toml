@@ -10,14 +10,15 @@
 #   - The folder inside 'src/'
 # ============================
 [project]
-name = "project1"
+name = "recipes"
 version = "0.0.1"
-description = "project1"
+description = "recipes"
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "gaaiuss", email = "caio.gui.castro@gmail.com" }]
 requires-python = ">=3.14"
 dependencies = [
+    "django>=6.1.2",
     "python-dotenv>=1.1.0",
     "rich>=15.0.0",
 ]

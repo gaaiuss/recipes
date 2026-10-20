@@ -8,4 +8,4 @@ if TYPE_CHECKING:
 
 # Create your views here.
 def home(request: HttpRequest) -> HttpResponse:
-    return render(request, "recipes/index.html")
+    return render(request, "recipes/pages/index.html")

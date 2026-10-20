@@ -2,11 +2,15 @@
 <html lang="en">
   {% include 'recipes/partials/_head.html' %}
   <body>
-    {% include 'recipes/partials/_header.html' %}
+    {% include 'recipes/partials/_header.html' %} 
     {% include 'recipes/partials/_search.html' %}
+
     <main class="main-content-container">
+
       <div class="main-content container main-content-list">
+        {% include 'recipes/partials/_recipe.html' %}
       </div>
+      
     </main>
   </body>
 </html>

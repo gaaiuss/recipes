@@ -87,8 +87,7 @@ venvPath = "."
 executionEnvironments = [{ root = "src" }]
 
 # Rules disabled
-# reportMissingTypeStubs = "none" # Missing stubs file
-# reportUnknownMemberType = "none" # Type of parameter partially unknown
+reportMissingTypeArgument = "none" # expected type arguments for generic class
 
 # ============================
 # Tests (Pytest)

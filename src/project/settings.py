@@ -123,6 +123,11 @@ STATIC_ROOT = (
     BASE_DIR / "static"  # where django will store all the static files of the project
 )
 
+MEDIA_URL = "media/"
+MEDIA_ROOT = (
+    BASE_DIR / "media"  # where django will store all the static files of the project
+)
+
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 

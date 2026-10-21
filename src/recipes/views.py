@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    recipes = Recipe.objects.all().order_by("-id")
+    recipes = Recipe.objects.filter(is_published=True).order_by("-id")
     context = {
         "recipes": recipes,
         # "recipes": [recipe_factory.make_recipe() for _ in range(12)],
@@ -23,7 +23,7 @@ def category(request: HttpRequest, category_id: int) -> HttpResponse:
     context = {
         "recipes": recipes,
     }
-    return render(request, "recipes/pages/index.html", context)
+    return render(request, "recipes/pages/category.html", context)
 
 
 def recipe(request: HttpRequest, recipe_id: int) -> HttpResponse:

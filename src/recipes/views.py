@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from django.shortcuts import render
 
+from recipes.models import Recipe
 from utils import recipe_factory
 
 if TYPE_CHECKING:
@@ -9,8 +10,18 @@ if TYPE_CHECKING:
 
 
 def home(request: HttpRequest) -> HttpResponse:
+    recipes = Recipe.objects.all().order_by("-id")
     context = {
-        "recipes": [recipe_factory.make_recipe() for _ in range(12)],
+        "recipes": recipes,
+        # "recipes": [recipe_factory.make_recipe() for _ in range(12)],
+    }
+    return render(request, "recipes/pages/index.html", context)
+
+
+def category(request: HttpRequest, category_id: int) -> HttpResponse:
+    recipes = Recipe.objects.filter(category__id=category_id).order_by("-id")
+    context = {
+        "recipes": recipes,
     }
     return render(request, "recipes/pages/index.html", context)
 

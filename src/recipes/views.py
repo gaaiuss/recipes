@@ -6,6 +6,9 @@ if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
-# Create your views here.
 def home(request: HttpRequest) -> HttpResponse:
     return render(request, "recipes/pages/index.html")
+
+
+def recipe(request: HttpRequest, recipe_id: int) -> HttpResponse:
+    return render(request, "recipes/pages/recipe_detail.html")

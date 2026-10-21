@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 def home(request: HttpRequest) -> HttpResponse:
     context = {
-        "recipes": [recipe_factory.make_recipe() for _ in range(10)],
+        "recipes": [recipe_factory.make_recipe() for _ in range(12)],
     }
     return render(request, "recipes/pages/index.html", context)
 
@@ -18,5 +18,6 @@ def home(request: HttpRequest) -> HttpResponse:
 def recipe(request: HttpRequest, recipe_id: int) -> HttpResponse:
     context = {
         "recipe": recipe_factory.make_recipe(),
+        "is_detail_page": True,
     }
     return render(request, "recipes/pages/recipe_detail.html", context)

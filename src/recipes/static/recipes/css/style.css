@@ -232,3 +232,31 @@ h6 {
   transform: scale(1);
   box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.2);
 }
+.recipe-preparation-steps h1,
+.recipe-preparation-steps h2,
+.recipe-preparation-steps h3,
+.recipe-preparation-steps h4,
+.recipe-preparation-steps h5,
+.recipe-preparation-steps h6,
+.recipe-preparation-steps p,
+.recipe-preparation-steps pre {
+  margin: 2rem 0;
+}
+
+.recipe-preparation-steps ul,
+.recipe-preparation-steps ol {
+  margin: 2rem;
+  padding: 0 2rem;
+}
+
+/* Generics */
+
+.center {
+  text-align: center;
+}
+.m-x {
+  margin: 0 var(--spacing-gutter-medium);
+}
+.m-y {
+  margin: var(--spacing-gutter-medium) 0;
+}

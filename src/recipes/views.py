@@ -38,7 +38,7 @@ def category(request: HttpRequest, category_id: int) -> HttpResponse:
     return render(request, "recipes/pages/category.html", context)
 
 
-def recipe(request: HttpRequest, recipe_id: int) -> HttpResponse:
+def recipe_detail(request: HttpRequest, recipe_id: int) -> HttpResponse:
     recipe = get_object_or_404(Recipe, pk=recipe_id, is_published=True)
     context = {
         "recipe": recipe,

@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from recipes.models import Recipe
-from utils import recipe_factory
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -21,14 +20,11 @@ def home(request: HttpRequest) -> HttpResponse:
 
 
 def category(request: HttpRequest, category_id: int) -> HttpResponse:
-    recipes = Recipe.objects.filter(
-        category__id=category_id,
-        is_published=True,
-    ).order_by("-id")
+    recipes = get_list_or_404(Recipe, category__id=category_id, is_published=True)
 
-    recipe = recipes.first()
+    recipe = recipes[0]
 
-    if recipe is not None and recipe.category is not None:
+    if recipe.category is not None:
         category_name = f"{recipe.category.name} - Category"
     else:
         msg = "Category does not exists"
@@ -43,8 +39,9 @@ def category(request: HttpRequest, category_id: int) -> HttpResponse:
 
 
 def recipe(request: HttpRequest, recipe_id: int) -> HttpResponse:
+    recipe = get_object_or_404(Recipe, pk=recipe_id, is_published=True)
     context = {
-        "recipe": recipe_factory.make_recipe(),
+        "recipe": recipe,
         "is_detail_page": True,
     }
     return render(request, "recipes/pages/recipe_detail.html", context)

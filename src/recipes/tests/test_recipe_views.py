@@ -63,7 +63,7 @@ class RecipeViewsTest(TestCase):
             category=category,
             author=author,
         )
-        assert 1 == 1
+        print(recipe)
 
     # ------------------------- Category -------------------------------------
 

@@ -5,23 +5,67 @@ from recipes import views
 
 
 class RecipeViewsTest(TestCase):
-    def test_recipe_home_view_is_ok(self) -> None:
+    def test_home_view_is_ok(self) -> None:
         view = resolve(reverse("recipes:home"))
 
         if view.func is not views.home:
             msg = f"{view.func} is not {views.home}"
             raise AssertionError(msg)
 
-    def test_recipe_category_view_is_ok(self) -> None:
-        view = resolve(reverse("recipes:category", kwargs={"category_id": 1}))
+    def test_home_view_returns_status_code_200_ok(self) -> None:
+        response = self.client.get(reverse("recipes:home"))
+        code = 200
+
+        if response.status_code != code:
+            msg = f"Status code not 200, got {response.status_code}"
+            raise AssertionError(msg)
+
+    def test_home_view_loads_correct_template(self) -> None:
+        response = self.client.get(reverse("recipes:home"))
+
+        if response.templates[0].name != "recipes/pages/index.html":
+            msg = f"{response.templates[0].name} is not 'recipes/pages/index.html'"
+            raise AssertionError(msg)
+
+    def test_recipe_home_template_shows_no_recipes_if_no_recipes_were_found(
+        self,
+    ) -> None:
+        response = self.client.get(reverse("recipes:home"))
+
+        if "<h1>No recipes here...</h1>" not in response.content.decode("utf-8"):
+            msg = "text '<h1>No recipes here...</h1>' not found int index.html"
+            raise AssertionError(msg)
+
+    def test_category_view_is_ok(self) -> None:
+        view = resolve(reverse("recipes:category", kwargs={"category_id": 1000}))
 
         if view.func is not views.category:
             msg = f"{view.func} is not {views.category}"
             raise AssertionError(msg)
 
-    def test_recipe_recipe_detail_view_is_ok(self) -> None:
+    def test_category_view_returns_404_if_no_recipes_found(self) -> None:
+        response = self.client.get(
+            reverse("recipes:category", kwargs={"category_id": 1000}),
+        )
+        code = 404
+
+        if response.status_code != code:
+            msg = f"Status code not 404, got {response.status_code}"
+            raise AssertionError(msg)
+
+    def test_recipe_detail_view_is_ok(self) -> None:
         view = resolve(reverse("recipes:recipe", kwargs={"recipe_id": 1}))
 
         if view.func is not views.recipe_detail:
             msg = f"{view.func} is not {views.recipe_detail}"
+            raise AssertionError(msg)
+
+    def test_detail_view_returns_404_if_no_recipes_found(self) -> None:
+        response = self.client.get(
+            reverse("recipes:recipe", kwargs={"recipe_id": 1000}),
+        )
+        code = 404
+
+        if response.status_code != code:
+            msg = f"Status code not 404, got {response.status_code}"
             raise AssertionError(msg)

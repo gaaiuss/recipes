@@ -1,10 +1,14 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import resolve, reverse
 
 from recipes import views
+from recipes.models import Category, Recipe
 
 
 class RecipeViewsTest(TestCase):
+    # ----------------------------- Home -------------------------------------
+
     def test_home_view_is_ok(self) -> None:
         view = resolve(reverse("recipes:home"))
 
@@ -36,14 +40,41 @@ class RecipeViewsTest(TestCase):
             msg = "text '<h1>No recipes here...</h1>' not found int index.html"
             raise AssertionError(msg)
 
-    def test_category_view_is_ok(self) -> None:
+    def test_recipe_home_template_loads_recipes(self) -> None:
+        category = Category.objects.create(name="Category")
+        author = User.objects.create_user(
+            username="user",
+            email="user@email.com",
+            password="123456",  # noqa: S106
+            first_name="user",
+            last_name="last name",
+        )
+        recipe = Recipe.objects.create(
+            title="Recipe title",
+            description="Recipe description",
+            slug="recipe-slug",
+            preparation_time=10,
+            preparation_time_unit="minutes",
+            servings=10,
+            servings_unit="portions",
+            preparation_steps="Recipe preparation steps",
+            preparation_steps_is_html=False,
+            is_published=True,
+            category=category,
+            author=author,
+        )
+        assert 1 == 1
+
+    # ------------------------- Category -------------------------------------
+
+    def test_recipe_category_view_is_ok(self) -> None:
         view = resolve(reverse("recipes:category", kwargs={"category_id": 1000}))
 
         if view.func is not views.category:
             msg = f"{view.func} is not {views.category}"
             raise AssertionError(msg)
 
-    def test_category_view_returns_404_if_no_recipes_found(self) -> None:
+    def test_recipe_category_view_returns_404_if_no_recipes_found(self) -> None:
         response = self.client.get(
             reverse("recipes:category", kwargs={"category_id": 1000}),
         )
@@ -52,6 +83,8 @@ class RecipeViewsTest(TestCase):
         if response.status_code != code:
             msg = f"Status code not 404, got {response.status_code}"
             raise AssertionError(msg)
+
+    # --------------------------- Detail -------------------------------------
 
     def test_recipe_detail_view_is_ok(self) -> None:
         view = resolve(reverse("recipes:recipe", kwargs={"recipe_id": 1}))

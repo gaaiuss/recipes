@@ -63,7 +63,11 @@ class RecipeViewsTest(TestCase):
             category=category,
             author=author,
         )
-        print(recipe)
+        response = self.client.get(reverse("recipes:home"))
+        content = response.content.decode("utf-8")
+
+        if recipe.title in content:
+            pass
 
     # ------------------------- Category -------------------------------------
 

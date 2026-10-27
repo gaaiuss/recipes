@@ -1,12 +1,10 @@
-from django.contrib.auth.models import User
-from django.test import TestCase
 from django.urls import resolve, reverse
 
 from recipes import views
-from recipes.models import Category, Recipe
+from recipes.tests.test_recipe_base import RecipeTestBase
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTestBase):
     # ----------------------------- Home -------------------------------------
 
     def test_home_view_is_ok(self) -> None:
@@ -41,33 +39,14 @@ class RecipeViewsTest(TestCase):
             raise AssertionError(msg)
 
     def test_recipe_home_template_loads_recipes(self) -> None:
-        category = Category.objects.create(name="Category")
-        author = User.objects.create_user(
-            username="user",
-            email="user@email.com",
-            password="123456",  # noqa: S106
-            first_name="user",
-            last_name="last name",
-        )
-        recipe = Recipe.objects.create(
-            title="Recipe title",
-            description="Recipe description",
-            slug="recipe-slug",
-            preparation_time=10,
-            preparation_time_unit="minutes",
-            servings=10,
-            servings_unit="portions",
-            preparation_steps="Recipe preparation steps",
-            preparation_steps_is_html=False,
-            is_published=True,
-            category=category,
-            author=author,
-        )
+        recipe = self.make_recipe()  # needs a recipe for this test
         response = self.client.get(reverse("recipes:home"))
         content = response.content.decode("utf-8")
 
-        if recipe.title in content:
-            pass
+        # checks if a recipe exists
+        if recipe.title not in content:
+            msg = f"{recipe.title} not found in {content}"
+            raise AssertionError(msg)
 
     # ------------------------- Category -------------------------------------
 

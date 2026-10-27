@@ -44,19 +44,17 @@ exclude = ["venv", ".venv", "env", ".env", "node_modules", "__pycache__"]
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+    "D", # All doctype rules
     "T201",  # Checks for print statements.
     "INP001", # Checks for packages that are missing an __init__.py file.
-    "D", # All pydocstyle (D)
-    # Checks that function arguments are annotated with a more specific type 
-    # than Any.
-    "ANN401", 
     "ERA001", # Checks for commented-out Python code.
     "A004", # Shadowing Python Builtin.
     "CPY001", # Missing copyright notice at top of file.
-    "PLR0913", # too many arguments
-    "FBT001", # boolean type hint positional
-    "FBT002", # boolean default value
-    "S107", # hardcoded password
+    "PLR0913", # Too many arguments
+    "FBT001", # Boolean type hint positional
+    "FBT002", # Boolean default value
+    "S107", # Hardcoded password
+    "PGH003", # Use specific rule codes when ignoring type issues
 ]
 
 [tool.ruff.lint.per-file-ignores]

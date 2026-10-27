@@ -45,7 +45,7 @@ class RecipeViewsTest(RecipeTestBase):
 
         # checks if a recipe exists
         if recipe.title not in content:
-            msg = f"{recipe.title} not found in {content}"
+            msg = f"{recipe.title} not found in response content"
             raise AssertionError(msg)
 
     # ------------------------- Category -------------------------------------
@@ -67,6 +67,17 @@ class RecipeViewsTest(RecipeTestBase):
             msg = f"Status code not 404, got {response.status_code}"
             raise AssertionError(msg)
 
+    def test_recipe_category_template_loads_recipes(self) -> None:
+        recipe = self.make_recipe(title="Category test")
+        response = self.client.get(
+            reverse("recipes:category", kwargs={"category_id": 1}),
+        )
+        content = response.content.decode("utf-8")
+
+        if recipe.title not in content:
+            msg = f"{recipe.title} not found in response content"
+            raise AssertionError(msg)
+
     # --------------------------- Detail -------------------------------------
 
     def test_recipe_detail_view_is_ok(self) -> None:
@@ -84,4 +95,14 @@ class RecipeViewsTest(RecipeTestBase):
 
         if response.status_code != code:
             msg = f"Status code not 404, got {response.status_code}"
+            raise AssertionError(msg)
+
+    def test_recipe_detail_template_loads_the_correct_recipe(self) -> None:
+        title = "Recipe detail page - It loads one recipe"
+        recipe = self.make_recipe(title=title)
+        response = self.client.get(reverse("recipes:recipe", kwargs={"recipe_id": 1}))
+        content = response.content.decode("utf-8")
+
+        if recipe.title not in content:
+            msg = f"{recipe.title} not found in response content"
             raise AssertionError(msg)

@@ -20,6 +20,7 @@ requires-python = ">=3.14"
 dependencies = [
     "django>=6.1.2",
     "faker>=40.43.0",
+    "parameterized>=0.9.0",
     "pillow>=13.0.0",
     "pytest>=9.1.1",
     "pytest-django>=4.14.0",
@@ -92,6 +93,8 @@ executionEnvironments = [{ root = "src" }]
 
 # Rules disabled
 reportMissingTypeArgument = "none" # expected type arguments for generic class
+reportMissingTypeStubs = "none" # Stub file not found for "parameterized"
+reportUnknownMemberType = "none" # Type of "expand" is partially unknown
 
 # ============================
 # Tests (Pytest)

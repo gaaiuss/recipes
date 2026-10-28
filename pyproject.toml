@@ -1,4 +1,4 @@
-# ============================
+# ============================================================================
 # Warning: Python version must be consistant between:
 #   - project.requires-python
 #   - tool.ruff.target-version
@@ -8,7 +8,7 @@
 #   - project.scripts
 #   - tool.ruff.lint.isort.known-first-party
 #   - The folder inside 'src/'
-# ============================
+# ============================================================================
 [project]
 name = "recipes"
 version = "0.0.1"
@@ -32,9 +32,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["ruff", "pyright", "pytest", "pytest-xdist"]
 
-# ============================
-# Linting and auto format (Ruff)
-# ============================
+# ============================================================================
+#                       Linting and auto format (Ruff)
+# ============================================================================
 [tool.ruff]
 line-length = 88
 target-version = "py314"
@@ -80,9 +80,9 @@ line-ending = "lf"
 # It must be the same name of the folder inside the 'src/'.
 known-first-party = ["my_package"]
 
-# ============================
-# Typing (Pyright)
-# ============================
+# ============================================================================
+#                              Typing (Pyright)
+# ============================================================================
 [tool.pyright]
 typeCheckingMode = "strict"
 pythonVersion = "3.14"
@@ -106,9 +106,9 @@ reportMissingTypeArgument = "none" # expected type arguments for generic class
 reportMissingTypeStubs = "none" # Stub file not found for "parameterized"
 reportUnknownMemberType = "none" # Type of "expand" is partially unknown
 
-# ============================
-# Tests (Pytest)
-# ============================
+# ============================================================================
+#                               Tests (Pytest)
+# ============================================================================
 [tool.pytest.ini_options]
 # Add 'src' to Python path during tests. This allows the tests in `tests/`
 # to import the modules in `src/` without errors.
@@ -118,8 +118,8 @@ testpaths = ["tests"]
 # Path where your Django project settings.py is
 DJANGO_SETTINGS_MODULE = "project.settings"
 
-# Test naming conventions: used by pytest to locate all test files
-# inside your project.
+# Test naming conventions: used by pytest to locate all test files inside your 
+# project.
 python_files = [
     "test.py",
     "tests.py",
@@ -129,23 +129,21 @@ python_files = [
     "*_tests.py",
 ]
 
-# --doctest-modules: pytest can now execute doctests (tests in docstrings).
-# --strict-markers: only markers registered below are allowed.
 addopts = [
-    "-s",
-    "--color=yes",
-    "--tb=short",
-    "--doctest-modules",
-    "--strict-markers",
+    "-s", # Disables output capturing.
+    "--color=yes", # Forces colored output.
+    "--tb=short", # Compact traceback.
+    "--doctest-modules", # Enable doctests (tests in docstrings).
+    "--strict-markers", # Only markers registered are allowed.
 ]
 markers = [
     "slow: Run slow tests",
     "fast: Run fast tests",
 ]
 
-# ============================
-# Build and Setuptools
-# ============================
+# ============================================================================
+#                            Build and Setuptools
+# ============================================================================
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"

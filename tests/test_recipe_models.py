@@ -68,3 +68,28 @@ class RecipeModelTest(RecipeTestBase):
                 f"'{expected}', got '{self.recipe!s}'"
             )
             raise AssertionError(msg)
+
+
+class RecipeCategoryModelTest(RecipeTestBase):
+    def setUp(self) -> None:
+        self.category = self.make_category()
+        return super().setUp()
+
+    def test_recipe_category_string_representation_is_name_field(self) -> None:
+        expected = "Test category string representation"
+        self.category.name = expected
+        self.category.full_clean()
+        self.category.save()
+
+        if str(self.category) != expected:
+            msg = (
+                "Recipe category string representation does not match. Expected "
+                f"'{expected}', got '{self.category!s}'"
+            )
+            raise AssertionError(msg)
+
+    def test_recipe_category_name_max_length_is_65(self) -> None:
+        self.category.name = "A" * 66
+
+        with pytest.raises(ValidationError):
+            self.category.full_clean()

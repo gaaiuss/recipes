@@ -55,3 +55,16 @@ class RecipeModelTest(RecipeTestBase):
         if recipe.is_published is not False:
             msg = "Recipe 'is_published' is not False"
             raise AssertionError(msg)
+
+    def test_recipe_string_representation(self) -> None:
+        expected = "Test string representation"
+        self.recipe.title = expected
+        self.recipe.full_clean()
+        self.recipe.save()
+
+        if str(self.recipe) != expected:
+            msg = (
+                "Recipe string representation does not match. Expected "
+                f"'{expected}', got '{self.recipe!s}'"
+            )
+            raise AssertionError(msg)

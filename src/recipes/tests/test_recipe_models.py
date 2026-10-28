@@ -2,13 +2,31 @@ import pytest
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
 
-from recipes.tests.test_recipe_base import RecipeTestBase
+from recipes.tests.test_recipe_base import Recipe, RecipeTestBase
 
 
 class RecipeModelTest(RecipeTestBase):
     def setUp(self) -> None:
         self.recipe = self.make_recipe()
         return super().setUp()
+
+    def make_recipe_no_defaults(self) -> Recipe:
+        recipe = Recipe(
+            title="Recipe title",
+            description="Recipe description",
+            slug="recipe-slug",
+            preparation_time=10,
+            preparation_time_unit="minutes",
+            servings=10,
+            servings_unit="portions",
+            preparation_steps="Recipe preparation steps",
+            category=self.make_category(name="Meat"),
+            author=self.make_author(username="gaaiuss"),
+        )
+        recipe.full_clean()
+        recipe.save()
+
+        return recipe
 
     @parameterized.expand(
         [
@@ -23,3 +41,17 @@ class RecipeModelTest(RecipeTestBase):
 
         with pytest.raises(ValidationError):
             self.recipe.full_clean()
+
+    def test_recipe_preparation_steps_is_html_is_false_by_default(self) -> None:
+        recipe = self.make_recipe_no_defaults()
+
+        if recipe.preparation_steps_is_html is not False:
+            msg = "Recipe 'preparation_steps_is_html' is not False"
+            raise AssertionError(msg)
+
+    def test_recipe_is_published_is_false_by_default(self) -> None:
+        recipe = self.make_recipe_no_defaults()
+
+        if recipe.is_published is not False:
+            msg = "Recipe 'is_published' is not False"
+            raise AssertionError(msg)

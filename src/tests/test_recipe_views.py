@@ -1,7 +1,7 @@
 from django.urls import resolve, reverse
 
 from recipes import views
-from recipes.tests.test_recipe_base import RecipeTestBase
+from tests.test_recipe_base import RecipeTestBase
 
 
 class RecipeViewsTest(RecipeTestBase):

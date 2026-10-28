@@ -2,7 +2,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
 
-from recipes.tests.test_recipe_base import Recipe, RecipeTestBase
+from tests.test_recipe_base import Recipe, RecipeTestBase
 
 
 class RecipeModelTest(RecipeTestBase):

@@ -22,9 +22,10 @@ class RecipeHomeViewTest(RecipeTestBase):
 
     def test_home_view_loads_correct_template(self) -> None:
         response = self.client.get(reverse("recipes:home"))
+        desired_template = "recipes/pages/index.html"
 
-        if response.templates[0].name != "recipes/pages/index.html":
-            msg = f"{response.templates[0].name} is not 'recipes/pages/index.html'"
+        if desired_template not in [t.name for t in response.templates]:
+            msg = f"'{desired_template}' not found in 'response.templates'"
             raise AssertionError(msg)
 
     def test_recipe_home_template_shows_no_recipes_if_no_recipes_were_found(

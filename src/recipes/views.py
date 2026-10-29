@@ -14,7 +14,6 @@ def home(request: HttpRequest) -> HttpResponse:
     context = {
         "recipes": recipes,
         "title": "Home",
-        # "recipes": [recipe_factory.make_recipe() for _ in range(12)],
     }
     return render(request, "recipes/pages/index.html", context)
 
@@ -49,4 +48,10 @@ def recipe_detail(request: HttpRequest, recipe_id: int) -> HttpResponse:
 
 def search(request: HttpRequest) -> HttpResponse:
     template_name = "recipes/pages/search.html"
+    request_term = request.GET.get("q")
+
+    if not request_term:
+        msg = f"{request_term} not found in {template_name} url"
+        raise Http404(msg)
+
     return render(request=request, template_name=template_name)

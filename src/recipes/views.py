@@ -47,4 +47,6 @@ def recipe_detail(request: HttpRequest, recipe_id: int) -> HttpResponse:
     return render(request, "recipes/pages/recipe_detail.html", context)
 
 
-def search(request: HttpRequest) -> HttpResponse: ...
+def search(request: HttpRequest) -> HttpResponse:
+    template_name = "recipes/pages/search.html"
+    return render(request=request, template_name=template_name)

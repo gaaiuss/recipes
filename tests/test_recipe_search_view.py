@@ -19,7 +19,7 @@ class RecipeSearchViewTest(RecipeTestBase):
         desired_template = "recipes/pages/search.html"
 
         if desired_template not in [t.name for t in response.templates]:
-            msg = f"'{desired_template}' not found in 'response.templates'"
+            msg = f"Template '{desired_template}' not found in 'response.templates'"
             raise AssertionError(msg)
 
     def test_recipe_search_raises_404_if_no_search_term(self) -> None:

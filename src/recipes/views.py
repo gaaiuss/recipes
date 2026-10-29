@@ -45,3 +45,6 @@ def recipe_detail(request: HttpRequest, recipe_id: int) -> HttpResponse:
         "is_detail_page": True,
     }
     return render(request, "recipes/pages/recipe_detail.html", context)
+
+
+def search(request: HttpRequest) -> HttpResponse: ...

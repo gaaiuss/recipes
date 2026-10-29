@@ -141,3 +141,13 @@ class RecipeViewsTest(RecipeTestBase):
         if response.status_code != code:
             msg = f"Status code not 404, got {response.status_code}"
             raise AssertionError(msg)
+
+    # --------------------------- Search ------------------------------------
+
+    def test_recipe_search_uses_correct_view_function(self) -> None:
+        search_url = reverse("recipes:search")
+        resolved = resolve(search_url)
+
+        if resolved.func is not views.search:
+            msg = f"{resolved.func} is not {views.search}"
+            raise AssertionError(msg)

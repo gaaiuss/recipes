@@ -33,3 +33,13 @@ class RecipeSearchViewTest(RecipeTestBase):
                 f"was sent, got {response.status_code}"
             )
             raise AssertionError(msg)
+
+    def test_recipe_search_term_is_on_page_title_and_escaped(self) -> None:
+        url_path = reverse("recipes:search") + '?q="<Test>"'
+        response = self.client.get(url_path)
+        content = response.content.decode("utf-8")
+        expected_escaped_title = "Search for &quot;&lt;Test&gt;&quot;"
+
+        if expected_escaped_title not in content:
+            msg = f"{expected_escaped_title} not found in content"
+            raise AssertionError(msg)

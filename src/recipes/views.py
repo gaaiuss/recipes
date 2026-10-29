@@ -48,10 +48,15 @@ def recipe_detail(request: HttpRequest, recipe_id: int) -> HttpResponse:
 
 def search(request: HttpRequest) -> HttpResponse:
     template_name = "recipes/pages/search.html"
-    request_term = request.GET.get("q")
+    search_term = request.GET.get("q", "").strip()
 
-    if not request_term:
-        msg = f"{request_term} not found in {template_name} url"
+    context = {
+        "title": f"Search for {search_term}",
+        "search_term": search_term,
+    }
+
+    if not search_term:
+        msg = f"Term {search_term} not found in template {template_name} url"
         raise Http404(msg)
 
-    return render(request=request, template_name=template_name)
+    return render(request=request, template_name=template_name, context=context)

@@ -10,6 +10,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("recipes/category/<int:category_id>/", views.category, name="category"),
     path("recipes/recipe/<int:recipe_id>/", views.recipe_detail, name="recipe"),
+    path("recipes/search/", lambda request: ..., name="search"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

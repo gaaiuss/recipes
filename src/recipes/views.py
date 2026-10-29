@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 
@@ -50,13 +51,21 @@ def search(request: HttpRequest) -> HttpResponse:
     template_name = "recipes/pages/search.html"
     search_term = request.GET.get("q", "").strip()
 
-    context = {
-        "title": f"Search for {search_term}",
-        "search_term": search_term,
-    }
-
     if not search_term:
         msg = f"Term {search_term} not found in template {template_name} url"
         raise Http404(msg)
+
+    recipes = Recipe.objects.filter(
+        Q(
+            Q(title__icontains=search_term) | Q(description__icontains=search_term),
+        ),
+        is_published=True,
+    ).order_by("-id")
+
+    context = {
+        "title": f"Search for {search_term}",
+        "search_term": search_term,
+        "recipes": recipes,
+    }
 
     return render(request=request, template_name=template_name, context=context)

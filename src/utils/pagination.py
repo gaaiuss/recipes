@@ -1,11 +1,15 @@
 from math import ceil
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 def make_pagination_range(
-    page_range: list[int],
+    page_range: Sequence[int],
     page_quantity_per_range: int,
     current_page: int,
-) -> dict[str, list[int] | int | bool]:
+) -> dict[str, Sequence[int] | int | bool]:
     """
     Return a "window" of page numbers to display around the current page.
 

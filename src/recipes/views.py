@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -12,10 +13,16 @@ if TYPE_CHECKING:
 
 def home(request: HttpRequest) -> HttpResponse:
     recipes = Recipe.objects.filter(is_published=True).order_by("-id")
+
+    paginator = Paginator(recipes, 9)
+    current_page = request.GET.get("page", 1)
+    page_object = paginator.get_page(current_page)
+
     context = {
-        "recipes": recipes,
+        "recipes": page_object,
         "title": "Home",
     }
+
     return render(request, "recipes/pages/index.html", context)
 
 

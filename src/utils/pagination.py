@@ -1,8 +1,15 @@
 from math import ceil
 from typing import TYPE_CHECKING
 
+from django.core.paginator import Page, Paginator
+from django.db.models import Model
+
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    from django.db.models import Model, QuerySet
+    from django.db.models.manager import BaseManager
+    from django.http import HttpRequest
 
 
 def make_pagination_range(
@@ -59,3 +66,27 @@ def make_pagination_range(
         "first_page_out_of_range": current_page > middle_range,
         "last_page_out_of_range": stop_range < total_pages,
     }
+
+
+def make_pagination[T: Model](
+    request: HttpRequest,
+    queryset: QuerySet[T] | BaseManager[T] | list[T],
+    per_page: int,
+    qt_per_page: int = 4,
+) -> tuple[Page, dict[str, Sequence[int] | int | bool]]:
+    try:
+        current_page = int(request.GET.get("page", 1))
+    except ValueError:
+        current_page = 1
+
+    paginator = Paginator(queryset, per_page)
+    page_object = paginator.get_page(current_page)
+    page_range = paginator.page_range
+
+    pagination_range = make_pagination_range(
+        page_range=page_range,
+        page_quantity_per_range=qt_per_page,
+        current_page=current_page,
+    )
+
+    return page_object, pagination_range

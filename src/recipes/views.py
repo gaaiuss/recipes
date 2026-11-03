@@ -1,33 +1,26 @@
 from typing import TYPE_CHECKING
 
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from recipes.models import Recipe
-from utils.pagination import make_pagination_range
+from utils.pagination import make_pagination
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
+PER_PAGE = 9
+
+
 def home(request: HttpRequest) -> HttpResponse:
     recipes = Recipe.objects.filter(is_published=True).order_by("-id")
 
-    try:
-        current_page = int(request.GET.get("page", 1))
-    except ValueError:
-        current_page = 1
-
-    paginator = Paginator(recipes, 9)
-    page_object = paginator.get_page(current_page)
-    page_range = paginator.page_range
-
-    pagination_range = make_pagination_range(
-        page_range=page_range,
-        page_quantity_per_range=4,
-        current_page=current_page,
+    page_object, pagination_range = make_pagination(
+        request=request,
+        queryset=recipes,
+        per_page=PER_PAGE,
     )
 
     context = {
@@ -50,8 +43,15 @@ def category(request: HttpRequest, category_id: int) -> HttpResponse:
         msg = "Category does not exists"
         raise Http404(msg)
 
+    page_object, pagination_range = make_pagination(
+        request=request,
+        queryset=recipes,
+        per_page=PER_PAGE,
+    )
+
     context = {
-        "recipes": recipes,
+        "recipes": page_object,
+        "pagination_range": pagination_range,
         "title": category_name,
     }
 
@@ -82,10 +82,18 @@ def search(request: HttpRequest) -> HttpResponse:
         is_published=True,
     ).order_by("-id")
 
+    page_object, pagination_range = make_pagination(
+        request=request,
+        queryset=recipes,
+        per_page=PER_PAGE,
+    )
+
     context = {
         "title": f"Search for {search_term}",
         "search_term": search_term,
-        "recipes": recipes,
+        "recipes": page_object,
+        "pagination_range": pagination_range,
+        "additional_url_query": f"&q={search_term}",
     }
 
     return render(request=request, template_name=template_name, context=context)

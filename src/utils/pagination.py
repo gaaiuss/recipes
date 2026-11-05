@@ -72,7 +72,7 @@ def make_pagination[T: Model](
     request: HttpRequest,
     queryset: QuerySet[T] | BaseManager[T] | list[T],
     per_page: int,
-    qt_per_page: int = 4,
+    page_quantity_per_range: int = 4,
 ) -> tuple[Page, dict[str, Sequence[int] | int | bool]]:
     try:
         current_page = int(request.GET.get("page", 1))
@@ -85,7 +85,7 @@ def make_pagination[T: Model](
 
     pagination_range = make_pagination_range(
         page_range=page_range,
-        page_quantity_per_range=qt_per_page,
+        page_quantity_per_range=page_quantity_per_range,
         current_page=current_page,
     )
 

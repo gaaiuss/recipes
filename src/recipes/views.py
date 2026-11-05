@@ -1,8 +1,10 @@
+import os
 from typing import TYPE_CHECKING
 
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
+from dotenv import load_dotenv
 
 from recipes.models import Recipe
 from utils.pagination import make_pagination
@@ -10,8 +12,9 @@ from utils.pagination import make_pagination
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
+load_dotenv()
 
-PER_PAGE = 9
+PER_PAGE = int(os.environ.get("PER_PAGE", "6"))
 
 
 def home(request: HttpRequest) -> HttpResponse:

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -24,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-a5h08e^6a*+ur%%-^x&9-y18_%hx4&@am_kgrcaxe4g_m6-rk="  # noqa: S105
+SECRET_KEY = os.environ.get("SECRET_KEY", "`.env` file not found.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "`.env` file not found.") == "1"
 
 ALLOWED_HOSTS = []
 

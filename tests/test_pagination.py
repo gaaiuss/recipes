@@ -1,19 +1,23 @@
+from typing import TYPE_CHECKING
 from unittest import TestCase
 
 from utils.pagination import make_pagination_range
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class PaginationTest(TestCase):
     def assert_pagination_range(
         self,
         desired_range: list[int],
-        pagination: list[int] | int,
+        pagination: Sequence[int] | int,
     ) -> None:
         if desired_range != pagination:
             msg = f"The desired range '{desired_range}' != '{pagination}'"
             raise AssertionError(msg)
 
-    def setup_default_pagination(self, current_page: int) -> list[int] | int:
+    def setup_default_pagination(self, current_page: int) -> Sequence[int] | int:
         page_range = list(range(1, 21))
         page_quantity_per_range = 4
 

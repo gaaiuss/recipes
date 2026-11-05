@@ -65,6 +65,7 @@ ignore = [
     "FBT002", # Boolean default value
     "S107", # Hardcoded password
     "PGH003", # Use specific rule codes when ignoring type issues
+    "PLR0917", # Too many positional arguments (12 > 5)
 ]
 
 [tool.ruff.lint.per-file-ignores]

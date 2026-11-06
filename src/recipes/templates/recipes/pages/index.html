@@ -4,13 +4,7 @@
 
 {% block content %}
 
-  {% if messages %}
-    <div class="main-content center container">
-      {% for message in messages %}
-        {{ message }}
-      {% endfor %}
-    </div>
-  {% endif %}
+  {% include 'recipes/partials/_message.html' %}
 
   <div class="main-content container main-content-list">
     {% for recipe in recipes %}
@@ -19,7 +13,7 @@
       <div class="center m-y"><h1>No recipes here...</h1></div>
     {% endfor %}
   </div>
-  
+
 {% endblock content %}
   
 

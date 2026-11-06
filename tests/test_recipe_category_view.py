@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.urls import resolve, reverse
 
 from recipes import views
@@ -44,3 +46,52 @@ class RecipeCategoryViewTest(RecipeTestBase):
         if response.status_code != code:
             msg = f"Status code not 404, got {response.status_code}"
             raise AssertionError(msg)
+
+    def test_recipe_category_is_paginated(self) -> None:
+        total_of_recipes = 9
+
+        for i in range(total_of_recipes):
+            author = self.make_author(username=f"u{i}")
+            slug = f"s{i}"
+            self.make_recipe(author=author, slug=slug)
+
+        with patch("recipes.views.PER_PAGE", new=3):
+            response = self.client.get(reverse("recipes:home"))
+            recipes = response.context["recipes"]
+            paginator = recipes.paginator
+
+            number_of_elements_per_page = 3
+
+            if paginator.num_pages != number_of_elements_per_page:
+                msg = (
+                    f"The number of pages '{paginator.num_pages}' is not "
+                    f"equal to the intended value of '{number_of_elements_per_page}'."
+                )
+                raise AssertionError(msg)
+
+            number_of_elements = len(paginator.get_page(1))
+
+            if number_of_elements != number_of_elements_per_page:
+                msg = (
+                    f"The number of elements in page '{number_of_elements}' is not "
+                    f"equal to the intended value of '{number_of_elements_per_page}'."
+                )
+                raise AssertionError(msg)
+
+            number_of_elements = len(paginator.get_page(2))
+
+            if number_of_elements != number_of_elements_per_page:
+                msg = (
+                    f"The number of elements in page '{number_of_elements}' is not "
+                    f"equal to the intended value of '{number_of_elements_per_page}'."
+                )
+                raise AssertionError(msg)
+
+            number_of_elements = len(paginator.get_page(3))
+
+            if number_of_elements != number_of_elements_per_page:
+                msg = (
+                    f"The number of elements in page '{number_of_elements}' is not "
+                    f"equal to the intended value of '{number_of_elements_per_page}'."
+                )
+                raise AssertionError(msg)

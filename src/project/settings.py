@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -134,4 +135,13 @@ MAILERS = {
     "default": {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
+}
+
+# These are the django message constants that we can use to edit our messages css
+MESSAGE_TAGS = {
+    constants.DEBUG: "message-debug",
+    constants.ERROR: "message-error",
+    constants.INFO: "message-info",
+    constants.SUCCESS: "message-success",
+    constants.WARNING: "message-warning",
 }

@@ -1,6 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
+from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -25,6 +26,8 @@ def home(request: HttpRequest) -> HttpResponse:
         queryset=recipes,
         per_page=PER_PAGE,
     )
+
+    messages.success(request, "Home view loaded successful.")
 
     context = {
         "recipes": page_object,

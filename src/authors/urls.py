@@ -8,7 +8,8 @@ app_name = "authors"
 
 # More specific above, more variable bellow.
 urlpatterns = [
-    path("register/", views.register_view, name="register"),
+    path("register/", views.register, name="register"),
+    path("register/create/", views.create, name="create"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

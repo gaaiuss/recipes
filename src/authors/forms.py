@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.contrib.auth.models import User
@@ -82,3 +82,25 @@ class RegisterForm(forms.ModelForm):
             raise ValidationError(msg, code="Invalid")
 
         return data
+
+    # After Django validates every field like above, it calls the clean() method
+    # to validade everything.
+    def clean(self) -> dict[str, Any]:
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+
+        if password != password2:
+            msg = "Password and password 2 must be equal."
+            raise ValidationError(
+                {
+                    "password": msg,
+                    # You can send as many field errors as you want.
+                    # "password2": msg,
+                    # Or a list as well.
+                    # "password2": [msg, "Another error."],
+                },
+            )
+
+        return cleaned_data

@@ -19,12 +19,15 @@ def add_placeholder(field: Field, placeholder_val: str) -> None:
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:  # type: ignore # noqa: ANN002, ANN003
         super().__init__(*args, **kwargs)
+        # Here we are modifying a specific field attribute using custom functions
         add_placeholder(self.fields["username"], "Your username.")
         add_placeholder(self.fields["email"], "Your e-mail.")
         add_placeholder(self.fields["first_name"], "Ex.: Paulo.")
         add_placeholder(self.fields["last_name"], "Ex.: Guina.")
         add_attr(self.fields["username"], "css", "a-css-class")
 
+    # Here we are rewriting the password field with custom parameters and
+    # creating a password2 field for password confirmation.
     password = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={"placeholder": "Your password."}),

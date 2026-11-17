@@ -7,8 +7,13 @@ if TYPE_CHECKING:
     from django.forms.fields import Field
 
 
+def add_attr(field: Field, attr_name: str, attr_val: str) -> None:
+    existing = field.widget.attrs.get(attr_name, "")
+    field.widget.attrs[attr_name] = f"`{existing} {attr_val}".strip()
+
+
 def add_placeholder(field: Field, placeholder_val: str) -> None:
-    field.widget.attrs["placeholder"] = placeholder_val
+    add_attr(field, "placeholder", placeholder_val)
 
 
 class RegisterForm(forms.ModelForm):
@@ -18,6 +23,7 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields["email"], "Your e-mail.")
         add_placeholder(self.fields["first_name"], "Ex.: Paulo.")
         add_placeholder(self.fields["last_name"], "Ex.: Guina.")
+        add_attr(self.fields["username"], "css", "a-css-class")
 
     password = forms.CharField(
         required=False,

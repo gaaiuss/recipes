@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 if TYPE_CHECKING:
     from django.forms.fields import Field
@@ -70,3 +71,14 @@ class RegisterForm(forms.ModelForm):
         #         },
         #     ),
         # }
+
+    # Validating a single field.
+    def clean_password(self) -> str | None:
+        data = self.cleaned_data.get("password")
+
+        # Checking if the word attention is in the password field.
+        if data is not None and "attention" in data:
+            msg = "Password cannot be cleaned because it is in attention status."
+            raise ValidationError(msg, code="Invalid")
+
+        return data

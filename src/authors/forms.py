@@ -1,3 +1,4 @@
+import re
 from typing import TYPE_CHECKING, Any
 
 from django import forms
@@ -17,6 +18,17 @@ def add_placeholder(field: Field, placeholder_val: str) -> None:
     add_attr(field, "placeholder", placeholder_val)
 
 
+def strong_password(password: str) -> None:
+    regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$")
+
+    if not regex.match(password):
+        msg = (
+            "Password must contain at least 8 characters, uppercase and "
+            "lowercase strings and a number"
+        )
+        raise ValidationError(msg, code="Invalid")
+
+
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:  # type: ignore # noqa: ANN002, ANN003
         super().__init__(*args, **kwargs)
@@ -32,10 +44,12 @@ class RegisterForm(forms.ModelForm):
     password = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={"placeholder": "Your password."}),
+        validators=[strong_password],
     )
     password2 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={"placeholder": "Repeat your password."}),
+        validators=[strong_password],
     )
 
     class Meta:

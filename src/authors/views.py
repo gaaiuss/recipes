@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
@@ -34,6 +35,17 @@ def create(request: HttpRequest) -> HttpResponseRedirect:
         raise Http404
 
     request.session["register_form_data"] = request.POST
-    # form = RegisterForm(request.POST)
+    form = RegisterForm(request.POST)
+
+    if form.is_valid():
+        form.save()
+        msg = "Your user was created successfully, please log in."
+        messages.success(request=request, message=msg)
+
+        del request.session["register_form_data"]
+
+        # You can edit data after validating your form as shown bellow.
+        # data = form.save(commit=False)
+        # data.another_field = "another value"
 
     return redirect("authors:register")

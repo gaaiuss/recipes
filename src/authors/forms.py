@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 def add_attr(field: Field, attr_name: str, attr_val: str) -> None:
     existing = field.widget.attrs.get(attr_name, "")
-    field.widget.attrs[attr_name] = f"`{existing} {attr_val}".strip()
+    field.widget.attrs[attr_name] = f"{existing} {attr_val}".strip()
 
 
 def add_placeholder(field: Field, placeholder_val: str) -> None:
@@ -24,7 +24,7 @@ def strong_password(password: str) -> None:
     if not regex.match(password):
         msg = (
             "Password must contain at least 8 characters, uppercase and "
-            "lowercase strings and a number"
+            "lowercase strings and a number."
         )
         raise ValidationError(msg, code="Invalid")
 
@@ -37,18 +37,23 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields["email"], "Your e-mail.")
         add_placeholder(self.fields["first_name"], "Ex.: Paulo.")
         add_placeholder(self.fields["last_name"], "Ex.: Guina.")
-        add_attr(self.fields["username"], "css", "a-css-class")
+        add_placeholder(self.fields["password"], "Your password.")
+        add_placeholder(self.fields["password2"], "Repeat your password.")
 
     # Here we are rewriting the password field with custom parameters and
     # creating a password2 field for password confirmation.
     password = forms.CharField(
         required=False,
-        widget=forms.PasswordInput(attrs={"placeholder": "Your password."}),
+        widget=forms.PasswordInput(),
         validators=[strong_password],
+        help_text=(
+            "Password must contain at least 8 characters, uppercase and "
+            "lowercase strings and a number."
+        ),
     )
     password2 = forms.CharField(
         required=False,
-        widget=forms.PasswordInput(attrs={"placeholder": "Repeat your password."}),
+        widget=forms.PasswordInput(),
         validators=[strong_password],
     )
 
@@ -68,9 +73,12 @@ class RegisterForm(forms.ModelForm):
         # These fields can be modified to rewrite some fields. As we are creating
         # then above, we do not need to use then.
 
-        # help_texts = {
-        #     "email": "E-mail must be valid.",
-        # }
+        help_texts = {
+            "username": (
+                "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+            ),
+            "email": "E-mail must be valid. Ex: pauloguina@email.com",
+        }
 
         # error_messages = {
         #     "username": {

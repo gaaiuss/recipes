@@ -43,7 +43,6 @@ class RegisterForm(forms.ModelForm):
     # Here we are rewriting the password field with custom parameters and
     # creating a password2 field for password confirmation.
     password = forms.CharField(
-        required=False,
         widget=forms.PasswordInput(),
         validators=[strong_password],
         help_text=(
@@ -51,12 +50,30 @@ class RegisterForm(forms.ModelForm):
             "lowercase strings and a number."
         ),
         label="Password:",
+        error_messages={"required": "Password must not be empty."},
     )
+
     password2 = forms.CharField(
-        required=False,
         widget=forms.PasswordInput(),
         validators=[strong_password],
         label="Repeat your password:",
+        error_messages={"required": "Please, repeat your password."},
+    )
+
+    first_name = forms.CharField(
+        label="First Name:",
+        error_messages={"required": "Write your first name."},
+    )
+
+    last_name = forms.CharField(
+        label="Last Name:",
+        error_messages={"required": "Write your last name."},
+    )
+
+    email = forms.EmailField(
+        label="E-mail:",
+        error_messages={"required": "E-mail is required."},
+        help_text="E-mail must be valid. Ex: pauloguina@email.com",
     )
 
     class Meta:
@@ -66,9 +83,6 @@ class RegisterForm(forms.ModelForm):
 
         labels = {
             "username": "Username:",
-            "first_name": "First Name:",
-            "last_name": "Last Name:",
-            "email": "E-mail:",
         }
 
         # These fields can be modified to rewrite some fields. As we are creating
@@ -78,7 +92,6 @@ class RegisterForm(forms.ModelForm):
             "username": (
                 "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
             ),
-            "email": "E-mail must be valid. Ex: pauloguina@email.com",
         }
 
         # error_messages = {

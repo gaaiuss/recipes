@@ -176,3 +176,29 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         if msg not in context_form_errors:
             error_msg = f"Username message '{msg}' not found in username errors."
             raise AssertionError(error_msg)
+
+    def test_password_field_have_lower_upper_case_letters_and_numbers(self):
+        self.form_data["password"] = "abc123"  # noqa: S105
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,  # When you have a url that redirects you must specify this.
+        )
+
+        response_content = response.content.decode("utf-8")
+        context_form_errors = response.context["form"].errors.get("password")
+
+        msg = (
+            "Password must contain at least 8 characters, uppercase and "
+            "lowercase strings and a number."
+        )
+
+        if msg not in response_content:
+            error_msg = f"Password message '{msg}' not found in response content."
+            raise AssertionError(error_msg)
+
+        if msg not in context_form_errors:
+            error_msg = f"Password message '{msg}' not found in password errors."
+            raise AssertionError(error_msg)

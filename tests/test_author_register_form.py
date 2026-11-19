@@ -35,8 +35,8 @@ class AuthorRegisterFormUnitTest(TestCase):
             (
                 "username",
                 (
-                    "Required. 150 characters or fewer. Letters, digits and "
-                    "@/./+/-/_ only."
+                    "At least 4 up to 150 characters required. Letters, digits "
+                    "and @/./+/-/_ only."
                 ),
             ),
             ("email", "E-mail must be valid. Ex: pauloguina@email.com"),
@@ -129,4 +129,50 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
             error_msg = (
                 f"Field '{field}' message '{msg}' not found in form field errors."
             )
+            raise AssertionError(error_msg)
+
+    def test_username_char_min_length_must_be_4(self) -> None:
+        self.form_data["username"] = "cai"
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,  # When you have a url that redirects you must specify this.
+        )
+
+        response_content = response.content.decode("utf-8")
+        context_form_errors = response.context["form"].errors.get("username")
+
+        msg = "At least 4 up to 150 characters required."
+
+        if msg not in response_content:
+            error_msg = f"Username message '{msg}' not found in response content."
+            raise AssertionError(error_msg)
+
+        if msg not in context_form_errors:
+            error_msg = f"Username message '{msg}' not found in username errors."
+            raise AssertionError(error_msg)
+
+    def test_username_char_max_length_must_be_150(self) -> None:
+        self.form_data["username"] = "C" * 151
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,  # When you have a url that redirects you must specify this.
+        )
+
+        response_content = response.content.decode("utf-8")
+        context_form_errors = response.context["form"].errors.get("username")
+
+        msg = "At least 4 up to 150 characters required."
+
+        if msg not in response_content:
+            error_msg = f"Username message '{msg}' not found in response content."
+            raise AssertionError(error_msg)
+
+        if msg not in context_form_errors:
+            error_msg = f"Username message '{msg}' not found in username errors."
             raise AssertionError(error_msg)

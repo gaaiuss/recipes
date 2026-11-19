@@ -76,23 +76,38 @@ class RegisterForm(forms.ModelForm):
         help_text="E-mail must be valid. Ex: pauloguina@email.com",
     )
 
+    username = forms.CharField(
+        help_text=(
+            "At least 4 up to 150 characters required. Letters, digits "
+            "and @/./+/-/_ only."
+        ),
+        label="Username:",
+        error_messages={
+            "required": "This field is required.",
+            "min_length": "At least 4 up to 150 characters required.",
+            "max_length": "At least 4 up to 150 characters required.",
+        },
+        min_length=4,
+        max_length=150,
+    )
+
     class Meta:
         model = User
         fields = ["username", "first_name", "last_name", "email", "password"]
         # exclude = ["first_name"]
 
-        labels = {
-            "username": "Username:",
-        }
+        # labels = {
+        #     "username": "Username:",
+        # }
 
         # These fields can be modified to rewrite some fields. As we are creating
         # then above, we do not need to use then.
 
-        help_texts = {
-            "username": (
-                "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-            ),
-        }
+        # help_texts = {
+        #     "username": (
+        #         "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        #     ),
+        # }
 
         # error_messages = {
         #     "username": {

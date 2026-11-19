@@ -50,11 +50,13 @@ class RegisterForm(forms.ModelForm):
             "Password must contain at least 8 characters, uppercase and "
             "lowercase strings and a number."
         ),
+        label="Password:",
     )
     password2 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(),
         validators=[strong_password],
+        label="Repeat your password:",
     )
 
     class Meta:
@@ -66,7 +68,6 @@ class RegisterForm(forms.ModelForm):
             "username": "Username:",
             "first_name": "First Name:",
             "last_name": "Last Name:",
-            "password": "Password:",
             "email": "E-mail:",
         }
 
@@ -95,15 +96,15 @@ class RegisterForm(forms.ModelForm):
         # }
 
     # Validating a single field.
-    def clean_password(self) -> str | None:
-        data = self.cleaned_data.get("password")
+    # def clean_password(self) -> str | None:
+    #     data = self.cleaned_data.get("password")
 
-        # Checking if the word attention is in the password field.
-        if data is not None and "attention" in data:
-            msg = "Password cannot be cleaned because it is in attention status."
-            raise ValidationError(msg, code="Invalid")
+    #     # Checking if the word attention is in the password field.
+    #     if data is not None and "attention" in data:
+    #         msg = "Password cannot be cleaned because it is in attention status."
+    #         raise ValidationError(msg, code="Invalid")
 
-        return data
+    #     return data
 
     # After Django validates every field like above, it calls the clean() method
     # to validade everything.

@@ -57,3 +57,25 @@ class AuthorRegisterFormUnitTest(TestCase):
         if desired != current:
             msg = f"Expected '{desired}', got '{current}'"
             raise AssertionError(msg)
+
+    @parameterized.expand(
+        [
+            ("username", "Username:"),
+            ("first_name", "First Name:"),
+            ("last_name", "Last Name:"),
+            ("password", "Password:"),
+            ("password2", "Repeat your password:"),
+            ("email", "E-mail:"),
+        ],
+    )
+    def test_fields_label(
+        self,
+        field_name: str,
+        desired: str,
+    ):
+        form = RegisterForm()
+        current = form[field_name].field.label
+
+        if desired != current:
+            msg = f"Expected '{desired}', got '{current}'"
+            raise AssertionError(msg)

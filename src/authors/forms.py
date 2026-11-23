@@ -143,7 +143,7 @@ class RegisterForm(forms.ModelForm):
         password2 = cleaned_data.get("password2")
 
         if password != password2:
-            msg = "Password and password 2 must be equal."
+            msg = "Password and password 2 must match."
             raise ValidationError(
                 {
                     "password": msg,

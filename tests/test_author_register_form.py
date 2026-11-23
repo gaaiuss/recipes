@@ -202,3 +202,64 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         if msg not in context_form_errors:
             error_msg = f"Password message '{msg}' not found in password errors."
             raise AssertionError(error_msg)
+
+        # Test if password is in context form errors
+
+        self.form_data["password"] = "@A123abc123"  # noqa: S105
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,
+        )
+
+        context_form_errors = response.context["form"].errors.get("password")
+
+        if msg in context_form_errors:
+            error_msg = f"Password message '{msg}' not found in password errors."
+            raise AssertionError(error_msg)
+
+    def test_password_and_password_confirmation_are_equal(self):
+        self.form_data["password"] = "@A123abc123"  # noqa: S105
+        self.form_data["password2"] = "@A123abc1234"
+
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,  # When you have a url that redirects you must specify this.
+        )
+
+        response_content = response.content.decode("utf-8")
+        context_form_errors = response.context["form"].errors.get("password")
+
+        msg = "Password and password 2 must match."
+
+        if msg not in response_content:
+            error_msg = f"Password message '{msg}' not found in response content."
+            raise AssertionError(error_msg)
+
+        if msg not in context_form_errors:
+            error_msg = f"Password message '{msg}' not found in password errors."
+            raise AssertionError(error_msg)
+
+        # Test when passwords are equal
+
+        self.form_data["password"] = "@A123abc123"  # noqa: S105
+        self.form_data["password2"] = "@A123abc123"
+
+        url = reverse("authors:create")
+
+        response = self.client.post(
+            url,
+            data=self.form_data,
+            follow=True,  # When you have a url that redirects you must specify this.
+        )
+
+        response_content = response.content.decode("utf-8")
+
+        if msg in response_content:
+            error_msg = f"Password message '{msg}' found in response content."
+            raise AssertionError(error_msg)

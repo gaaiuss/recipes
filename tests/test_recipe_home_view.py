@@ -108,3 +108,34 @@ class RecipeHomeViewTest(RecipeTestBase):
                     f"equal to the intended value of '{number_of_elements_per_page}'."
                 )
                 raise AssertionError(msg)
+
+    def test_invalid_page_query_uses_page_1(self) -> None:
+        total_of_recipes = 9
+
+        for i in range(total_of_recipes):
+            author = self.make_author(username=f"u{i}")
+            slug = f"s{i}"
+            self.make_recipe(author=author, slug=slug)
+
+        with patch("recipes.views.PER_PAGE", new=3):
+            incorrect_page = "?page=1A"
+            response = self.client.get(reverse("recipes:home") + incorrect_page)
+            page_number = 1
+
+            if response.context["recipes"].number != page_number:
+                msg = (
+                    f"{response.context['recipes'].number} is not equal to "
+                    f"the desired page number '{page_number}'"
+                )
+                raise AssertionError(msg)
+
+            incorrect_page = "?page=2"
+            response = self.client.get(reverse("recipes:home") + incorrect_page)
+            page_number = 2
+
+            if response.context["recipes"].number != page_number:
+                msg = (
+                    f"{response.context['recipes'].number} is not equal to "
+                    f"the desired page number '{page_number}'"
+                )
+                raise AssertionError(msg)

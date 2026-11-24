@@ -263,3 +263,12 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         if msg in response_content:
             error_msg = f"Password message '{msg}' found in response content."
             raise AssertionError(error_msg)
+
+    def test_send_get_request_to_register_create_view_returns_404(self) -> None:
+        url = reverse("authors:create")
+        response = self.client.get(url)
+        status_404 = 404
+
+        if response.status_code != status_404:
+            msg = "Response did not returned 404."
+            raise AssertionError(msg)

@@ -300,3 +300,28 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
                 f"{response_content}"
             )
             raise AssertionError(error_msg)
+
+    def test_author_created_can_login(self) -> None:
+        url = reverse("authors:create")
+
+        username = "test_user"
+        password = "Safepass!@21"  # noqa: S105
+
+        self.form_data.update(
+            {
+                "username": username,
+                "password": password,
+                "password2": password,
+            },
+        )
+
+        self.client.post(url, data=self.form_data, follow=True)
+
+        is_authenticated = self.client.login(
+            username=username,
+            password=password,
+        )
+
+        if not is_authenticated:
+            msg = f"User '{username}' not authenticated."
+            raise AssertionError(msg)

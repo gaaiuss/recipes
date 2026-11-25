@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from authors.forms import RegisterForm
+from authors.forms import LoginForm, RegisterForm
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -15,13 +15,13 @@ def register(request: HttpRequest) -> HttpResponse:
     """
     This is the view responsible to render the form.
     """
-    template_path = "authors/pages/register.html"
+    template_name = "authors/pages/register.html"
     register_form_data = request.session.get("register_form_data")
     form = RegisterForm(register_form_data)
 
     return render(
         request=request,
-        template_name=template_path,
+        template_name=template_name,
         context={
             "form": form,
             "form_action": reverse("authors:register_create"),
@@ -58,12 +58,17 @@ def register_create(request: HttpRequest) -> HttpResponseRedirect:
 
 
 def login(request: HttpRequest) -> HttpResponse:
-    template_path = "authors/pages/login.html"
+    template_name = "authors/pages/login.html"
+    form = LoginForm()
+    context = {
+        "form": form,
+        "form_action": reverse("authors:login_create"),
+    }
 
-    return render(request, template_path)
+    return render(request=request, template_name=template_name, context=context)
 
 
 def login_create(request: HttpRequest) -> HttpResponse:
-    template_path = "authors/pages/login.html"
+    template_name = "authors/pages/login.html"
 
-    return render(request, template_path)
+    return render(request, template_name)

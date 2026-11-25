@@ -12,8 +12,15 @@ urlpatterns = [
     path(
         # create will not be accessed.
         "register/create/",
-        views.create,
-        name="create",
+        views.register_create,
+        name="register_create",
+    ),
+    path("login/", views.login, name="login"),
+    path(
+        # create will not be accessed.
+        "login/create/",
+        views.login_create,
+        name="login_create",
     ),
 ]
 

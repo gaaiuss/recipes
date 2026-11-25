@@ -15,21 +15,21 @@ def register(request: HttpRequest) -> HttpResponse:
     """
     This is the view responsible to render the form.
     """
-    template_name = "authors/pages/register.html"
+    template_path = "authors/pages/register.html"
     register_form_data = request.session.get("register_form_data")
     form = RegisterForm(register_form_data)
 
     return render(
         request=request,
-        template_name=template_name,
+        template_name=template_path,
         context={
             "form": form,
-            "form_action": reverse("authors:create"),
+            "form_action": reverse("authors:register_create"),
         },
     )
 
 
-def create(request: HttpRequest) -> HttpResponseRedirect:
+def register_create(request: HttpRequest) -> HttpResponseRedirect:
     """
     This view is responsible to redirect back to the form if the page is reloaded.
     """
@@ -55,3 +55,15 @@ def create(request: HttpRequest) -> HttpResponseRedirect:
         # data.another_field = "another value"
 
     return redirect("authors:register")
+
+
+def login(request: HttpRequest) -> HttpResponse:
+    template_path = "authors/pages/login.html"
+
+    return render(request, template_path)
+
+
+def login_create(request: HttpRequest) -> HttpResponse:
+    template_path = "authors/pages/login.html"
+
+    return render(request, template_path)

@@ -109,7 +109,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     )
     def test_fields_cannot_be_empty(self, field: str, msg: str) -> None:
         self.form_data[field] = ""
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -133,7 +133,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     def test_username_char_min_length_must_be_4(self) -> None:
         self.form_data["username"] = "cai"
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -156,7 +156,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     def test_username_char_max_length_must_be_150(self) -> None:
         self.form_data["username"] = "C" * 151
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -179,7 +179,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     def test_password_field_have_lower_upper_case_letters_and_numbers(self):
         self.form_data["password"] = "abc123"  # noqa: S105
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -206,7 +206,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         # Test if password is in context form errors
 
         self.form_data["password"] = "@A123abc123"  # noqa: S105
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -224,7 +224,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.form_data["password"] = "@A123abc123"  # noqa: S105
         self.form_data["password2"] = "@A123abc1234"
 
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -250,7 +250,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.form_data["password"] = "@A123abc123"  # noqa: S105
         self.form_data["password2"] = "@A123abc123"
 
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         response = self.client.post(
             url,
@@ -265,7 +265,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
             raise AssertionError(error_msg)
 
     def test_send_get_request_to_register_create_view_returns_404(self) -> None:
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
         response = self.client.get(url)
         status_404 = 404
 
@@ -276,7 +276,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     def test_if_email_is_already_in_use(self):
         self.form_data["email"] = "email@email.com"
 
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         # Creating a user twice with the same data.
         self.client.post(url, data=self.form_data, follow=True)
@@ -302,7 +302,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
             raise AssertionError(error_msg)
 
     def test_author_created_can_login(self) -> None:
-        url = reverse("authors:create")
+        url = reverse("authors:register_create")
 
         username = "test_user"
         password = "Safepass!@21"  # noqa: S105

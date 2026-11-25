@@ -38,7 +38,11 @@ def create(request: HttpRequest) -> HttpResponseRedirect:
     form = RegisterForm(request.POST)
 
     if form.is_valid():
-        form.save()
+        # Before we save the form we must criptograph the user password.
+        user = form.save(commit=False)
+        user.set_password(user.password)
+        user.save()
+
         msg = "Your user was created successfully, please log in."
         messages.success(request=request, message=msg)
 

@@ -124,6 +124,16 @@ class RegisterForm(forms.ModelForm):
         # }
 
     # Validating a single field.
+    def clean_email(self) -> str:
+        email = self.cleaned_data.get("email", "")
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            msg = "E-mail already in use."
+            raise ValidationError(msg, code="invalid")
+
+        return email
+
     # def clean_password(self) -> str | None:
     #     data = self.cleaned_data.get("password")
 

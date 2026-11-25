@@ -109,6 +109,7 @@ reportMissingTypeArgument = "none" # expected type arguments for generic class
 reportMissingTypeStubs = "none" # Stub file not found for "parameterized"
 reportUnknownMemberType = "none" # Type of "expand" is partially unknown
 reportUnknownArgumentType = "none" # args and kwargs.
+reportUnknownVariableType = "none" # Type of variable unknown.
 
 # ============================================================================
 #                               Tests (Pytest)

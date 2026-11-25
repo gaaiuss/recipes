@@ -105,7 +105,8 @@ class RegisterForm(forms.ModelForm):
 
         # help_texts = {
         #     "username": (
-        #         "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        #         "Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+        # only."
         #     ),
         # }
 

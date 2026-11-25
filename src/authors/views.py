@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from authors.forms import RegisterForm
 
@@ -23,6 +24,7 @@ def register(request: HttpRequest) -> HttpResponse:
         template_name=template_name,
         context={
             "form": form,
+            "form_action": reverse("authors:create"),
         },
     )
 

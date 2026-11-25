@@ -272,3 +272,31 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         if response.status_code != status_404:
             msg = "Response did not returned 404."
             raise AssertionError(msg)
+
+    def test_if_email_is_already_in_use(self):
+        self.form_data["email"] = "email@email.com"
+
+        url = reverse("authors:create")
+
+        # Creating a user twice with the same data.
+        self.client.post(url, data=self.form_data, follow=True)
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        email_error_msgs = response.context["form"].errors.get("email")
+        response_content = response.content.decode("utf-8")
+
+        msg = "E-mail already in use."
+
+        if msg not in email_error_msgs:
+            error_msg = (
+                f"Email message '{msg}' not found in email error messages "
+                f"{email_error_msgs}"
+            )
+            raise AssertionError(error_msg)
+
+        if msg not in response_content:
+            error_msg = (
+                f"Email message '{msg}' not found in response content "
+                f"{response_content}"
+            )
+            raise AssertionError(error_msg)

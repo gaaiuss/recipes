@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import messages
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -69,6 +71,29 @@ def login(request: HttpRequest) -> HttpResponse:
 
 
 def login_create(request: HttpRequest) -> HttpResponse:
-    template_name = "authors/pages/login.html"
+    if not request.POST:
+        raise Http404
 
-    return render(request, template_name)
+    form = LoginForm(request.POST)
+    login_url = reverse("authors:login")
+
+    if form.is_valid():
+        authenticated_user = authenticate(
+            request=request,
+            username=form.cleaned_data.get("username", ""),
+            password=form.cleaned_data.get("password", ""),
+        )
+
+        if authenticated_user is not None:
+            msg = "Success! You are now logged in."
+            messages.success(request=request, message=msg)
+            django_login(request=request, user=authenticated_user)
+        else:
+            msg = "Invalid credentials."
+            messages.error(request=request, message=msg)
+
+    else:
+        msg = "Invalid username or password."
+        messages.error(request=request, message=msg)
+
+    return redirect(login_url)

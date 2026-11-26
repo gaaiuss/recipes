@@ -7,7 +7,22 @@
     <h2>Login</h2>
     
     {% if request.user.is_authenticated %}
-      <p>You are logged in as {{ request.user.username }}.</p>
+      <div>
+        You are logged in as {{ request.user.username }}.
+
+        {% comment %} Here whe could use a simple link to make the logout, but instead we
+        will use a form to send a csrf token to prevent a csrf attack in our
+        application {% endcomment %}
+        {% comment %} Click <a href="{% url 'authors:logout' %}">here</a> to logout. {% endcomment %}
+
+         
+        <form class="inline-form" action="{% url 'authors:logout' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="username" value="{{ request.user.username }}">
+          <button class="plaintext-button" type="submit">Logout</button>
+        </form>
+         
+      </div>
     {% endif %}
       
   </div>

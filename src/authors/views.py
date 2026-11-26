@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
+from django.contrib.auth import logout as django_logout
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -52,6 +54,9 @@ def register_create(request: HttpRequest) -> HttpResponseRedirect:
 
         del request.session["register_form_data"]
 
+        # Redirecting to authors login as the form is valid.
+        return redirect(reverse("authors:login"))
+
         # You can edit data after validating your form as shown bellow.
         # data = form.save(commit=False)
         # data.another_field = "another value"
@@ -70,7 +75,7 @@ def login(request: HttpRequest) -> HttpResponse:
     return render(request=request, template_name=template_name, context=context)
 
 
-def login_create(request: HttpRequest) -> HttpResponse:
+def login_create(request: HttpRequest) -> HttpResponseRedirect:
     if not request.POST:
         raise Http404
 
@@ -97,3 +102,22 @@ def login_create(request: HttpRequest) -> HttpResponse:
         messages.error(request=request, message=msg)
 
     return redirect(login_url)
+
+
+# This is a restricted view as you need to be logged in to logout.
+@login_required(
+    login_url="authors:login",
+    # This is the location that you will be redirected after you login.
+    # The next word redirects the user to the location that he tried to access
+    # before, when it was not logged in.
+    redirect_field_name="next",
+)
+def logout(request: HttpRequest) -> HttpResponseRedirect:
+    if not request.POST:
+        return redirect(reverse("authors:login"))
+
+    if request.POST.get("username") != request.user.username:
+        return redirect(reverse("authors:login"))
+
+    django_logout(request=request)
+    return redirect(reverse("authors:login"))

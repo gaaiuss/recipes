@@ -145,6 +145,9 @@ addopts = [
 markers = [
     "slow: Run slow tests",
     "fast: Run fast tests",
+    # pytest -m 'functional_test' or
+    # pytest -m 'not functional_test' to exclude this marker.
+    "functional_test: Run selenium tests"
 ]
 
 # ============================================================================

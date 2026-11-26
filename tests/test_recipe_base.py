@@ -4,7 +4,7 @@ from django.test import TestCase
 from recipes.models import Category, Recipe
 
 
-class RecipeTestBase(TestCase):
+class RecipeMixin:
     def make_category(self, name: str = "Category") -> Category:
         return Category.objects.create(name=name)
 
@@ -59,3 +59,8 @@ class RecipeTestBase(TestCase):
             category=category,
             author=author,
         )
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self) -> None:
+        return super().setUp()

@@ -72,5 +72,3 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
                 f"'{recipes_per_page}'"
             )
             raise AssertionError(msg)
-
-        self.sleep()

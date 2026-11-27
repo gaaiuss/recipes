@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+import pytest
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
@@ -11,6 +12,7 @@ if TYPE_CHECKING:
     from selenium.webdriver.remote.webelement import WebElement
 
 
+@pytest.mark.functional_test
 class AuthorsRegisterTest(AuthorsBaseTest):
     def get_web_element_by_placeholder(
         self,

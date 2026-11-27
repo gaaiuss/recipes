@@ -9,7 +9,7 @@ from .base import RecipeBaseFunctionalTest
 
 @pytest.mark.functional_test
 class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
-    @patch("recipes.views.PER_PAGE", new=4)
+    @patch("recipes.views.PER_PAGE", new=2)
     def test_recipe_home_page_without_recipes_not_found_message(self):
         self.browser.get(self.live_server_url)
 
@@ -20,7 +20,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
             msg = f"'{desired}' message not found in body text"
             raise AssertionError(msg)
 
-    @patch("recipes.views.PER_PAGE", new=4)
+    @patch("recipes.views.PER_PAGE", new=2)
     def test_recipe_search_input_finds_correct_recipe(self):
         recipes = self.make_recipe_in_batch(20)
 

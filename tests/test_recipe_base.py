@@ -60,6 +60,22 @@ class RecipeMixin:
             author=author,
         )
 
+    def make_recipe_in_batch(self, recipe_qtt: int) -> list[Recipe]:
+        recipes = []
+
+        for i in range(recipe_qtt):
+            title = f"Recipe Batch - {i}"
+            author = self.make_author(username=f"u{i}")
+            slug = f"s{i}"
+            recipe = self.make_recipe(
+                title=title,
+                author=author,
+                slug=slug,
+            )
+            recipes.append(recipe)
+
+        return recipes
+
 
 class RecipeTestBase(TestCase, RecipeMixin):
     def setUp(self) -> None:

@@ -47,3 +47,30 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         if desired_title not in body_text:
             msg = f"'{desired_title}' not found in body text: {body_text}"
             raise AssertionError(msg)
+
+    @patch("recipes.views.PER_PAGE", new=2)
+    def test_pagination_loads_correct_number_of_recipes(self):
+        self.make_recipe_in_batch(20)
+
+        # User opens the page
+        self.browser.get(self.live_server_url)
+
+        # Sees that there is a pagination in the page and clicks on the page 2.
+        page2 = self.browser.find_element(
+            By.XPATH,
+            "//a[@aria-label='Go to page 2']",
+        )
+        page2.click()
+
+        # Sees that there are 2 more recipes on the page.
+        recipes_qt_found = len(self.browser.find_elements(By.CLASS_NAME, "recipe"))
+        recipes_per_page = 2
+
+        if recipes_qt_found != recipes_per_page:
+            msg = (
+                f"Recipes found '{recipes_qt_found}' differ from the recipes per page "
+                f"'{recipes_per_page}'"
+            )
+            raise AssertionError(msg)
+
+        self.sleep()

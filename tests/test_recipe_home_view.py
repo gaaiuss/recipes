@@ -61,12 +61,7 @@ class RecipeHomeViewTest(RecipeTestBase):
             raise AssertionError(msg)
 
     def test_recipe_home_is_paginated(self) -> None:
-        total_of_recipes = 9
-
-        for i in range(total_of_recipes):
-            author = self.make_author(username=f"u{i}")
-            slug = f"s{i}"
-            self.make_recipe(author=author, slug=slug)
+        self.make_recipe_in_batch(recipe_qtt=9)
 
         with patch("recipes.views.PER_PAGE", new=3):
             response = self.client.get(reverse("recipes:home"))
@@ -110,12 +105,7 @@ class RecipeHomeViewTest(RecipeTestBase):
                 raise AssertionError(msg)
 
     def test_invalid_page_query_uses_page_1(self) -> None:
-        total_of_recipes = 9
-
-        for i in range(total_of_recipes):
-            author = self.make_author(username=f"u{i}")
-            slug = f"s{i}"
-            self.make_recipe(author=author, slug=slug)
+        self.make_recipe_in_batch(recipe_qtt=9)
 
         with patch("recipes.views.PER_PAGE", new=3):
             incorrect_page = "?page=1A"
